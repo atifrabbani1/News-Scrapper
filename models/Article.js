@@ -24,6 +24,7 @@ var ArticleSchema = new Schema({
     required: true,
     unique: true
   },
+
   // `comment` is an object that stores a Comment id
   // The ref property links the ObjectId to the Comment model
   // This allows us to populate the Article with an associated Comment

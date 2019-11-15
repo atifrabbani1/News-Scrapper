@@ -44,7 +44,7 @@ mongoose.connect(MONGODB_URI);
 // Routes
 app.get("/", function (req, res) {
     // Pull the article details along with the comments on article
-    db.Article.find({})
+    db.Article.find({}).sort({_id: -1})
         .populate("comment")
         .then(function (results) {
             res.render("index", { articles: results })
@@ -72,7 +72,7 @@ app.get("/scrape", function (req, res) {
             result.summary = $(this)
                 .attr("data-c-br");
             result.url = "https://www.usatoday.com" + $(this)
-                .attr("href")
+                .attr("href");
 
             console.log(result);
 
@@ -89,7 +89,7 @@ app.get("/scrape", function (req, res) {
         });
         // Send a message to the client
         res.send("completed");
-        
+
     });
 });
 
@@ -140,7 +140,7 @@ app.delete("/articles/:id", function (req, res) {
     db.Comment.deleteOne({ _id: req.params.id })
 
         .then(function () {
-          return  db.Article.findOneAndUpdate({ comment: req.params.id },
+            return db.Article.findOneAndUpdate({ comment: req.params.id },
                 { $pull: { comment: req.params.id } })
         })
         .then(function (data) {
