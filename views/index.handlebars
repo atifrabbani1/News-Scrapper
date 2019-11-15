@@ -3,8 +3,41 @@
 <ul>
   {{#each articles}}
   <li>
-    <p>{{this.headline}} <br> {{this.summary}} <br> <a href="{{this.url}}">Click Here to Read Article</a> 
-      <button id="comments">Comments</button>
+    <p>Headline: {{this.headline}} <br>
+      Summary: {{this.summary}} <br>
+      Link: <a href="{{this.url}}" target="_blank">Click Here to Read Article</a>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-primary" id="comment" data-toggle="modal" data-target="#ModId{{this._id}}">
+        Comment
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="ModId{{this._id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Comments for {{this.headline}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              ...
+              <hr>
+            </div>
+
+            <form>
+              <div class="form-group">
+                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                  placeholder="Type a Comment">
+              </div>
+              <button type="button" class="btn btn-primary" id="post" data-dismiss="modal">Post Comment</button>
+            </form>
+
+          </div>
+        </div>
+      </div>
     </p>
   </li>
   {{/each}}

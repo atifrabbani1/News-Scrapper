@@ -39,7 +39,14 @@ mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser: true }
 
 // Routes
 app.get("/",function(req,res){
-    res.render("index");
+    db.Article.find({})
+    .then(function(results){
+        res.render("index", {articles:results})
+    })
+    .catch(function(err) {
+        // If an error occurred, log it
+        console.log(err);
+      });
 })
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
@@ -74,16 +81,7 @@ app.get("/scrape", function(req, res) {
           console.log(err);
         });
     });
-
-    db.Article.find({})
-    .then(function(results){
-        res.render("index", {articles:results})
-    })
-    .catch(function(err) {
-        // If an error occurred, log it
-        console.log(err);
-      });
-
+    res.send("completed")
     // Send a message to the client
    // res.send("Scrape Complete");
   });

@@ -3,6 +3,7 @@ $("#scrape").on("click", function(){
         method: "GET",
         url: "/scrape"
     }).then(function(results){
-        window.location.href = "/scrape"
+        if(results === "completed")
+        location.reload();
     })
 })
