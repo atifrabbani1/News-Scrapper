@@ -1,3 +1,4 @@
+//GET method to scrape all the news on the app
 $("#scrape").on("click", function (event) {
     event.preventDefault();
     $.ajax({
@@ -9,6 +10,7 @@ $("#scrape").on("click", function (event) {
     })
 })
 
+//GET method to view all the comments on the article
 $(".comment").on("click", function (event) {
     
     event.preventDefault();
@@ -21,17 +23,17 @@ $(".comment").on("click", function (event) {
     })
 })
 
+//POST method to post a comment on article
 $(".post").on("click", function (event) {
     event.preventDefault();
 
     var thisId = $(this).attr("data-id");
-    //var text = $("#text").val().trim();
 
     $.ajax("/articles/" + thisId, {
         method: "POST",
         data: {
 
-            // Value taken from note textarea
+            // Value taken from comment textbox
             body: $("#message" + thisId).val().trim()
           }
     }).then(function(data){
@@ -40,6 +42,7 @@ $(".post").on("click", function (event) {
     })
 })
 
+//DELETE method to delete a comment on article.
 $(".delete").on("click", function(event){
     event.preventDefault();
     var thisId = $(this).attr("data-id");

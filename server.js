@@ -43,6 +43,7 @@ mongoose.connect(MONGODB_URI);
 
 // Routes
 app.get("/", function (req, res) {
+    // Pull the article details along with the comments on article
     db.Article.find({})
         .populate("comment")
         .then(function (results) {
@@ -53,19 +54,19 @@ app.get("/", function (req, res) {
             console.log(err);
         });
 })
-// A GET route for scraping the echoJS website
+// A GET route for scraping the USA today website
 app.get("/scrape", function (req, res) {
     // First, we grab the body of the html with axios
     axios.get("https://www.usatoday.com/news/").then(function (response) {
         // Then, we load that into cheerio and save it to $ for a shorthand selector
         var $ = cheerio.load(response.data);
 
-        // Now, we grab every h2 within an article tag, and do the following:
+        // Now, we grab every gnt_m_flm_a class, and do the following:
         $(".gnt_m_flm_a").each(function (i, element) {
             // Save an empty result object
             var result = {};
 
-            // Add the text and href of every link, and save them as properties of the result object
+            // Add the headline, summary and href of every link, and save them as properties of the result object
             result.headline = $(this)
                 .text();
             result.summary = $(this)
@@ -86,15 +87,15 @@ app.get("/scrape", function (req, res) {
                     console.log(err);
                 });
         });
-        res.send("completed");
         // Send a message to the client
-        // res.send("Scrape Complete");
+        res.send("completed");
+        
     });
 });
 
 // Route for getting all Articles from the db
 app.get("/articles", function (req, res) {
-    // TODO: Finish the route so it grabs all of the articles
+    // This grabs all of the articles
     db.Article.find({})
         .then(function (data) {
             res.json(data)
@@ -104,7 +105,7 @@ app.get("/articles", function (req, res) {
         })
 });
 
-// Route for grabbing a specific Article by id, populate it with it's note
+// Route for grabbing a specific Article by id, populate it with it's comment
 app.get("/articles/:id", function (req, res) {
     db.Article.findOne({ _id: req.params.id })
         .populate("comment")
@@ -114,14 +115,9 @@ app.get("/articles/:id", function (req, res) {
         .catch(function (err) {
             res.json(err)
         })
-    // TODO
-    // ====
-    // Finish the route so it finds one article using the req.params.id,
-    // and run the populate method with "note",
-    // then responds with the article with the note included
 });
 
-// Route for saving/updating an Article's associated Note
+// Route for saving/updating an Article's associated Comment
 app.post("/articles/:id", function (req, res) {
 
     db.Comment.create(
@@ -137,22 +133,16 @@ app.post("/articles/:id", function (req, res) {
         .catch(function (err) {
             res.json(err)
         })
-    // TODO
-    // ====
-    // save the new note that gets posted to the Notes collection
-    // then find an article from the req.params.id
-    // and update it's "note" property with the _id of the new note
 });
 
+//Route for Deleting comment and update Article's associated Comment
 app.delete("/articles/:id", function (req, res) {
     db.Comment.deleteOne({ _id: req.params.id })
 
         .then(function () {
           return  db.Article.findOneAndUpdate({ comment: req.params.id },
                 { $pull: { comment: req.params.id } })
-
         })
-
         .then(function (data) {
             res.json(data)
         })
