@@ -38,7 +38,9 @@ app.engine(
 mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser: true });
 
 // Routes
-
+app.get("/",function(req,res){
+    res.render("index");
+})
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
@@ -56,7 +58,7 @@ app.get("/scrape", function(req, res) {
         .text();
       result.summary = $(this)
         .attr("data-c-br");
-        result.url = $(this)
+        result.url = "https://www.usatoday.com" + $(this)
         .attr("href")
 
         console.log(result);
@@ -73,8 +75,17 @@ app.get("/scrape", function(req, res) {
         });
     });
 
+    db.Article.find({})
+    .then(function(results){
+        res.render("index", {articles:results})
+    })
+    .catch(function(err) {
+        // If an error occurred, log it
+        console.log(err);
+      });
+
     // Send a message to the client
-    res.send("Scrape Complete");
+   // res.send("Scrape Complete");
   });
 });
 

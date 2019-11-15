@@ -1,0 +1,11 @@
+<h1>Latest News Articles</h1>
+<button id="scrape">Scrape new articles</button>
+<ul>
+  {{#each articles}}
+  <li>
+    <p>{{this.headline}} <br> {{this.summary}} <br> <a href="{{this.url}}">Click Here to Read Article</a> 
+      <button id="comments">Comments</button>
+    </p>
+  </li>
+  {{/each}}
+</ul>
