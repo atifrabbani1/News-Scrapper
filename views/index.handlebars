@@ -7,7 +7,8 @@
       Summary: {{this.summary}} <br>
       Link: <a href="{{this.url}}" target="_blank">Click Here to Read Article</a>
       <!-- Button trigger modal -->
-      <button type="button" class="btn btn-primary" id="comment" data-toggle="modal" data-target="#ModId{{this._id}}">
+      <button type="button" class="btn btn-primary comment" data-id="{{this._id}}" data-toggle="modal"
+        data-target="#ModId{{this._id}}">
         Comment
       </button>
 
@@ -23,17 +24,20 @@
               </button>
             </div>
             <div class="modal-body">
-              ...
+              {{#each this.comment}}
+              {{this.body}}
               <hr>
+              {{/each}}
             </div>
 
-            <form>
-              <div class="form-group">
-                <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                  placeholder="Type a Comment">
-              </div>
-              <button type="button" class="btn btn-primary" id="post" data-dismiss="modal">Post Comment</button>
-            </form>
+
+            <div class="form-group">
+              <input type="text" class="form-control" id="message{{this._id}}" aria-describedby="emailHelp"
+                placeholder="Type a Comment">
+            </div>
+            <button type="button" class="btn btn-primary post" data-id="{{this._id}}" data-dismiss="modal">Post
+              Comment</button>
+
 
           </div>
         </div>
