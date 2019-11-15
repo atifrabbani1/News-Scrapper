@@ -40,7 +40,7 @@ mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser: true }
 // Routes
 app.get("/", function (req, res) {
     db.Article.find({})
-    .populate("comment")
+        .populate("comment")
         .then(function (results) {
             res.render("index", { articles: results })
         })
@@ -125,7 +125,7 @@ app.post("/articles/:id", function (req, res) {
     ).then(function (data) {
         console.log(data)
         return db.Article.findOneAndUpdate({ _id: req.params.id },
-            { $push: { comment: data._id } }, {new: true})
+            { $push: { comment: data._id } }, { new: true })
     })
         .then(function (data) {
             res.json(data)
@@ -139,6 +139,23 @@ app.post("/articles/:id", function (req, res) {
     // then find an article from the req.params.id
     // and update it's "note" property with the _id of the new note
 });
+
+app.delete("/articles/:id", function (req, res) {
+    db.Comment.deleteOne({ _id: req.params.id })
+
+        .then(function () {
+          return  db.Article.findOneAndUpdate({ comment: req.params.id },
+                { $pull: { comment: req.params.id } })
+
+        })
+
+        .then(function (data) {
+            res.json(data)
+        })
+        .catch(function (err) {
+            res.json(err)
+        })
+})
 
 // Start the server
 app.listen(PORT, function () {

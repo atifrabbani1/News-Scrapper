@@ -26,6 +26,7 @@
             <div class="modal-body">
               {{#each this.comment}}
               {{this.body}}
+              <button type="button" class="btn btn-outline-danger float-right delete" data-id="{{this._id}}" data-dismiss="modal">x</button>
               <hr>
               {{/each}}
             </div>

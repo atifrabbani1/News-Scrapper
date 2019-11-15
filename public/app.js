@@ -39,3 +39,15 @@ $(".post").on("click", function (event) {
         location.reload();
     })
 })
+
+$(".delete").on("click", function(event){
+    event.preventDefault();
+    var thisId = $(this).attr("data-id");
+
+    $.ajax("/articles/" + thisId,{
+        method: "DELETE"
+    }).then(function (results) {
+        console.log(results)
+        location.reload();
+    })
+})
